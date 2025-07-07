@@ -10,7 +10,7 @@
     </div>
     <div class="riwayat-list">
       <div class="riwayat-item" v-for="item in filteredRiwayat" :key="item.id">
-        <img :src="item.gambar" :alt="item.judul" class="cover">
+        <img :src="item.gambar" :alt="item.judul" class="cover" />
         <div class="detail">
           <h4>{{ item.judul }}</h4>
           <p class="penulis">{{ item.pengarang }}</p>
@@ -30,35 +30,7 @@ export default {
   data() {
     return {
       filterStatus: 'semua',
-      riwayatPinjam: [
-        {
-          id: 1,
-          judul: 'Laskar Pelangi',
-          pengarang: 'Andrea Hirata',
-          gambar: 'img/buku/laskar-pelangi.jpg',
-          tanggalPinjam: '2023-05-15',
-          tanggalKembali: '2023-06-01',
-          status: 'dikembalikan'
-        },
-        {
-          id: 2,
-          judul: 'Naruto Vol. 1',
-          pengarang: 'Masashi Kishimoto',
-          gambar: 'img/buku/naruto.jpg',
-          tanggalPinjam: '2023-06-10',
-          tanggalKembali: '',
-          status: 'dipinjam'
-        },
-        {
-          id: 3,
-          judul: 'Dilan 1990',
-          pengarang: 'Pidi Baiq',
-          gambar: '/img/buku/dilan-1990.jpg',
-          tanggalPinjam: '2023-04-20',
-          tanggalKembali: '2023-05-05',
-          status: 'dikembalikan'
-        }
-      ]
+      riwayatPinjam: []
     }
   },
   computed: {
@@ -68,6 +40,14 @@ export default {
       }
       return this.riwayatPinjam.filter(item => item.status === this.filterStatus)
     }
+  },
+  created() {
+    fetch('http://localhost:3000/riwayat')
+      .then(res => res.json())
+      .then(data => {
+        this.riwayatPinjam = data
+      })
+      .catch(err => console.error('Gagal memuat data riwayat pinjam:', err))
   }
 }
 </script>
