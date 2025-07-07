@@ -51,14 +51,35 @@ export default {
   },
   methods: {
     simpanBuku() {
-      alert(`Buku "${this.buku.judul}" berhasil ditambahkan ke koleksi fiksi!`)
-      this.buku = {
-        judul: '',
-        pengarang: '',
-        genre: '',
-        sinopsis: '',
-        gambar: ''
-      }
+      fetch('http://localhost:3000/buku', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...this.buku,
+          rating: 0,
+          tersedia: true
+        })
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Gagal menyimpan')
+          return res.json()
+        })
+        .then(() => {
+          alert(`Buku "${this.buku.judul}" berhasil ditambahkan!`)
+          this.buku = {
+            judul: '',
+            pengarang: '',
+            genre: '',
+            sinopsis: '',
+            gambar: ''
+          }
+        })
+        .catch(err => {
+          alert('Terjadi kesalahan saat menyimpan data')
+          console.error(err)
+        })
     }
   }
 }
